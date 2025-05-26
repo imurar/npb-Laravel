@@ -7,6 +7,8 @@
     <title>阪神名鑑</title>
     <body>
         <h1>阪神タイガース</h1>
-        <a href="{{ route('satoteru') }}">佐藤 輝明</a>    
+        <a href="{{ route('satoteru') }}">佐藤 輝明</a> 
+        <br>
+        <a href="{{ route('teams') }}">球団一覧</a>
     </body>
 </html>

@@ -17,5 +17,5 @@ Route::get('/sato8', function() {
     return view('sato8');
 }) -> name('satoteru');
 
-Route::get('/team/create', [MTeamController::class, 'createTeams']);
-Route::get('/team', [MTeamController::class, 'listTeams']);
+Route::get('/teams/create', [MTeamController::class, 'createTeams']) -> name('teams/create');
+Route::get('/teams', [MTeamController::class, 'listTeams']) -> name('teams');
