@@ -12,9 +12,9 @@ class MPlayer extends Model
     protected $fillable = [
         'name',
         'position',
-        'unino',
+        'uniform_no',
         'team',
-        'highscool',
+        'highschool',
         'university',
         'birthday',
         'prefecture',
