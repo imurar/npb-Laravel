@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class MTeam extends Model
 {
     //
-    protected $table = 'm_teams'; //つけないとm_teamsesでご認識するかも
+    public $table = 'm_teams'; //つけないとDB誤認するかも。
+
     protected $fillable = ['name'];
 }

@@ -1,7 +1,20 @@
-<form action="{{ route('players.store') }}" method="POST">
-    @csrf
-    <input type="text" name="name" placeholder="選手">
-    <button type="submit">登録</button>
-</form>
+<h1>球団一覧</h1>
 
-<a href="{{ route('top') }}">戻る</a>
+<table border="1" cellpadding="5">
+    <thead>
+        <tr>
+            <th>id</th>
+            <th>球団名</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach($teams as $team)
+        <tr>
+            <td>{{ $team->id }}</td>
+            <td>{{ $team->name }}</td>
+        </tr>
+        @endforeach
+    </tbody>
+</table>
+
+    <a href="{{route('top')}}">戻る</a>
