@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\MTeamController;
+use App\Http\Controllers\MPlayerController;
 
 /*
 Route::get('/', function () {
@@ -17,5 +18,9 @@ Route::get('/sato8', function() {
     return view('sato8');
 }) -> name('satoteru');
 
-Route::get('/teams/create', [MTeamController::class, 'createTeams']) -> name('teams/create');
+Route::get('/teams/create', [MTeamController::class, 'createTeams']) -> name('teams.create');
 Route::get('/teams', [MTeamController::class, 'listTeams']) -> name('teams');
+
+Route::get('/player', [MPlayerController::class, 'index'])->name('players.index');
+Route::get('/player/create', [MPlayerController::class, 'createPlayer'])->name('players.create');
+Route::post('/player',[MPlayerController::class, 'storePlayer'])->name('players.store');

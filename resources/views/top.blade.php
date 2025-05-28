@@ -10,5 +10,9 @@
         <a href="{{ route('satoteru') }}">佐藤 輝明</a> 
         <br>
         <a href="{{ route('teams') }}">球団一覧</a>
+        <br>
+        <a href="{{ route('players.index') }}">選手一覧画面</a>
+        <br>
+        <a href="{{ route('players.create') }}">選手登録画面</a>
     </body>
 </html>

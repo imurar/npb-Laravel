@@ -1,6 +1,7 @@
-<h1>球団一覧</h1>
+<form action="{{ route('players.store') }}" method="POST">
+    @csrf
+    <input type="text" name="name" placeholder="選手">
+    <button type="submit">登録</button>
+</form>
 
-<a href="{{ route('teams/create') }}">球団作成</a>
-@foreach($teams as $team)
-    <p>{{ $team->name }}</p>
-@endforeach
+<a href="{{ route('top') }}">戻る</a>

@@ -15,9 +15,9 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('position');
-            $table->string('unino');
+            $table->string('uniform_no');
             $table->string('team');
-            $table->string('highscool');
+            $table->string('highschool');
             $table->string('university');
             $table->string('birthday');
             $table->string('prefecture');
