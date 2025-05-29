@@ -11,7 +11,11 @@
         @foreach($teams as $team)
         <tr>
             <td>{{ $team->id }}</td>
-            <td>{{ $team->name }}</td>
+            <td>
+                <a href="{{ route('teams.show', ['id' => $team->id]) }}">
+                    {{ $team->name }}
+                </a>
+            </td>
         </tr>
         @endforeach
     </tbody>
