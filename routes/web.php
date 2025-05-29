@@ -21,3 +21,5 @@ Route::get('/teams/{id}/players', [MTeamController::class, 'players'])->name('te
 Route::get('/players', [MPlayerController::class, 'index'])->name('players.index');
 Route::get('/players/create', [MPlayerController::class, 'create'])->name('players.create');
 Route::post('/players',[MPlayerController::class, 'store'])->name('players.store');
+
+
