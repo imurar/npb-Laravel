@@ -12,7 +12,7 @@
         <tr>
             <td>{{ $team->id }}</td>
             <td>
-                <a href="{{ route('teams.show', ['id' => $team->id]) }}">
+                <a href="{{ route('teams.show', ['team_id' => $team->id]) }}">
                     {{ $team->name }}
                 </a>
             </td>

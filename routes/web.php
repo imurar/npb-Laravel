@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\MTeamController;
 use App\Http\Controllers\MPlayerController;
+use App\Http\Controllers\TPlayerController;
 
 /*
 Route::get('/', function () {
@@ -15,13 +16,18 @@ Route::get('/', function () {
 }) -> name('top');
 
 Route::get('/teams', [MTeamController::class, 'index'])->name('teams.index');
-Route::get('/teams/{id}', [MTeamController::class, 'show'])->name('teams.show');
-Route::get('/teams/{id}/players', [MTeamController::class, 'players'])->name('teams.players');
+Route::get('/teams/{team_id}', [MTeamController::class, 'show'])->name('teams.show');
 
+
+Route::get('/teams/{team_id}/players', [TPlayerController::class, 'index'])->name('players.index'); //所属選手一覧
+Route::get('/teams/{team_id}/players/create', [TPlayerController::class, 'create'])->name('players.create');
+Route::post('/teams/{team_id}/players', [TPlayerController::class, 'store'])->name('players.store');
+Route::get('/teams/{team_id}/players/{player_id}', [TPlayerController::class, 'show'])->name('players.show');
+Route::get('/teams/{team_id}/players/{player_id}/edit', [TPlayerController::class, 'edit'])->name('players.edit');
 
 //↓後で削除
-Route::get('/players', [MPlayerController::class, 'index'])->name('players.index');
-Route::get('/players/create', [MPlayerController::class, 'create'])->name('players.create');
-Route::post('/players',[MPlayerController::class, 'store'])->name('players.store');
+//Route::get('/players', [MPlayerController::class, 'index'])->name('players.index');
+//Route::get('/players/create', [MPlayerController::class, 'create'])->name('players.create');
+//Route::post('/players',[MPlayerController::class, 'store'])->name('players.store');
 
 
