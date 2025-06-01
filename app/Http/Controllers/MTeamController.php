@@ -13,15 +13,14 @@ class MTeamController extends Controller
         return view('teams.index' , compact('teams'));
     }
 
-    public function show($id){
-        $teams = MTeam::findOrFail($id);
-        return view('teams.show', compact('teams'));
+    public function show($team_id){
+        $team = MTeam::findOrFail($team_id);
+        return view('teams.show', compact('team'));
     }
 
-    public function players($id){
-        $team = MTeam::findOrFail($id);
-        $players = TPlayer::where('team_id', $id)->get();
-        return view('teams.players', compact('players'));
-
-    }
+    //public function players($team_id){
+    //    $team = MTeam::findOrFail($id);
+    //    $players = TPlayer::where('team_id', $team_id)->get();
+    //    return view('teams.players', compact('players, team'));
+    //}
 }
