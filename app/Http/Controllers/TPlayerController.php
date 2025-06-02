@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\TPlayer;
 use App\Models\MTeam;
+use App\Models\MPosition;
+use App\Models\MPrefecture;
+use App\Models\MCity;
 
 class TPlayerController extends Controller
 {
@@ -17,7 +20,10 @@ class TPlayerController extends Controller
 
     public function create($team_id){
         $team = MTeam::findOrFail($team_id);
-        return view('players.create', compact('team'));
+        $positions = MPosition::all();
+        $prefectures = MPrefecture::all();
+        $citys = MCity::all();
+        return view('players.create', compact('team', 'positions', 'prefectures', 'citys'));
     }
 
     public function store(Request $request){

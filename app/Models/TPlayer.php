@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class TPlayer extends Model
 {
     //
-    public $table = 't_players';
+    protected $table = 't_players';
 
     protected $fillable = [
         'name',
