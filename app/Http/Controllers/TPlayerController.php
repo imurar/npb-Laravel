@@ -48,9 +48,15 @@ class TPlayerController extends Controller
                         ->with('success', '選手が登録されました。');
     }
 
-    public function show(){
+    public function show($team_id, $player_id){
+        $player = TPlayer::with(['position', 'team', 'prefecture', 'city'])
+            ->where('team_id', $team_id)
+            ->findOrFail($player_id);
+        
+        $team = MTeam::findOrFail($team_id);
 
-    }
+        return view('players.show', compact('team', 'player'));
+    }   
 
     public function edit(){
 
