@@ -25,6 +25,7 @@ Route::get('/teams/{team_id}/players/create', [TPlayerController::class, 'create
 Route::post('/teams/{team_id}/players', [TPlayerController::class, 'store'])->name('players.store');
 Route::get('/teams/{team_id}/players/{player_id}', [TPlayerController::class, 'show'])->name('players.show');
 Route::get('/teams/{team_id}/players/{player_id}/edit', [TPlayerController::class, 'edit'])->name('players.edit');
+Route::put('/teams/{team_id}/players/{player_id}', [TPlayerController::class, 'update'])->name('players.update');
 
 //↓後で削除
 //Route::get('/players', [MPlayerController::class, 'index'])->name('players.index');

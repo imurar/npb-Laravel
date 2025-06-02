@@ -12,8 +12,8 @@
 <form method="POST" action="{{ route('players.store', ['team_id' => $team->id]) }}">
     @csrf
     <!-- nameはDBのカラム名と揃える -->
+    <label>背番号: <input type="text" name="uniform_no" value="{{ old('uniform_no') }}"></label><br>
     <label>名前: <input type="text" name = "name" value="{{ old('name') }}"></label><br>
-    
     <label>ポジション:
         <select name="position_id">
             @foreach ($positions as $position)
@@ -23,9 +23,7 @@
             @endforeach
         </select>
     </label><br>
-
-    <label>背番号: <input type="text" name="uniform_no" value="{{ old('uniform_no') }}"></label><br>
-    <label>球団: {{$team -> name }}</label><br>
+    <label>球団: {{ $team -> name }}</label><br>
     <label>高校: <input type="text" name="highschool" value="{{ old('highschool') }}"></label><br>
     <label>大学: <input type="text" name="university" value="{{ old('university') }}"></label><br>
     <label>誕生日: <input type="text" name="birthday" value="{{ old('birthday') }}"></label><br>
@@ -38,7 +36,7 @@
             @endforeach
         </select>
     </label><br>
-    <label>市区町村:
+    <label>出身地(市区町村):
         <select name="city_id">
             @foreach ($citys as $city)
                 <option value="{{$city -> id}}" {{ old('city') == $city->name ? 'selected' : '' }}>

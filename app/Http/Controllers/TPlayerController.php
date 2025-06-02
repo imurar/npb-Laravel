@@ -58,7 +58,38 @@ class TPlayerController extends Controller
         return view('players.show', compact('team', 'player'));
     }   
 
-    public function edit(){
+    public function edit($team_id, $player_id){
+        $player = TPlayer::with(['position', 'team', 'prefecture', 'city'])
+            ->where('team_id', $team_id)
+            ->findOrFail($player_id);
+        
+        $team = MTeam::findOrFail($team_id);
 
+        $positions = MPosition::all();
+        $prefectures =Mprefecture::all();
+        $citys = MCity::all();
+
+        return view('players.edit', compact('player', 'team', 'positions', 'prefectures', 'citys'));
+    }
+
+    public function update(Request $request, $team_id, $player_id){
+
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'position_id' => 'required|string|max:255',
+            'uniform_no' => 'required|string|max:10',
+            'highschool' => 'nullable|string|max:255',
+            'university' => 'nullable|string|max:255',
+            'birthday' => 'nullable|string|max:255',
+            'prefecture_id' => 'nullable|string|max:255',
+            'city_id' => 'nullable|string|max:255',
+        ]);
+
+        $player = TPlayer::where('team_id', $team_id)->findOrFail($player_id);
+
+        $player->update($request->all());
+
+        return redirect()->route('players.show', ['team_id' => $team_id, 'player_id' => $player_id])
+            ->with('success', '選手情報を更新しました。');
     }
 }

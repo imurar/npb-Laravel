@@ -28,5 +28,5 @@
     </tbody>
 
 </table>
-<a href="{{ route('players.edit', ['team_id' => $team->id]) }}">編集</a>
+<a href="{{ route('players.edit', ['team_id' => $team->id, 'player_id' => $player->id]) }}">編集</a>
 <a href="{{ route('players.index', ['team_id' => $team->id]) }}">戻る</a>
