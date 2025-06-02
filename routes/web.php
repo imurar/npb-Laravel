@@ -26,6 +26,8 @@ Route::post('/teams/{team_id}/players', [TPlayerController::class, 'store'])->na
 Route::get('/teams/{team_id}/players/{player_id}', [TPlayerController::class, 'show'])->name('players.show');
 Route::get('/teams/{team_id}/players/{player_id}/edit', [TPlayerController::class, 'edit'])->name('players.edit');
 Route::put('/teams/{team_id}/players/{player_id}', [TPlayerController::class, 'update'])->name('players.update');
+Route::delete('/teams/{team_id}/players/{player_id}', [TPlayerController::class, 'destroy'])->name('players.destroy');
+Route::post('/teams/{team_id}/players/{player_id}/restore', [TPlayerController::class, 'restore'])->name('players.restore');
 
 //↓後で削除
 //Route::get('/players', [MPlayerController::class, 'index'])->name('players.index');
