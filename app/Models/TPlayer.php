@@ -40,5 +40,10 @@ class TPlayer extends Model
         'birthday',
         'prefecture_id',
         'city_id',
+        'is_favorite',
+    ];
+
+    protected $casts = [
+        'is_favorite' => 'boolean',
     ];
 }
