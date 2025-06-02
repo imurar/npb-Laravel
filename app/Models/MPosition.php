@@ -7,14 +7,16 @@ use Illuminate\Database\Eloquent\Model;
 class MPosition extends Model
 {
     //
-    public $table = 'm_positions';
+    protected $table = 'm_positions';
     
     public $timestamps = false;
 
     protected $fillable = ['name'];
 
     //TPlayerとのリレーション
+    //Position 1 に属するプレイヤーが複数いる場合、このリレーションで
+    //position->players で全プレイヤーが取得できる。
     public function players() {
-        return $tihs->hasMany(TPlayer::class, 'position_id');
+        return $this->hasMany(TPlayer::class, 'position_id');
     }
 }

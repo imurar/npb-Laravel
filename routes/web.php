@@ -15,10 +15,11 @@ Route::get('/', function () {
     return view('top');
 }) -> name('top');
 
+//MTeam
 Route::get('/teams', [MTeamController::class, 'index'])->name('teams.index');
 Route::get('/teams/{team_id}', [MTeamController::class, 'show'])->name('teams.show');
 
-
+//TPlayer
 Route::get('/teams/{team_id}/players', [TPlayerController::class, 'index'])->name('players.index'); //所属選手一覧
 Route::get('/teams/{team_id}/players/create', [TPlayerController::class, 'create'])->name('players.create');
 Route::post('/teams/{team_id}/players', [TPlayerController::class, 'store'])->name('players.store');
