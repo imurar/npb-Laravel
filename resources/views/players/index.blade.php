@@ -23,4 +23,5 @@
 
 </table>
 <a href="{{route('players.deleted', ['team_id' => $team->id])}}">削除選手ページ遷移</a><br>
-<a href="{{ route('teams.show', ['team_id' => $team->id]) }}">戻る</a>
+<a href="{{ route('teams.show', ['team_id' => $team->id]) }}">戻る</a><br>
+<a href="{{ route('top') }}">トップページ</a>
