@@ -28,11 +28,11 @@
     </tbody>
 
 </table>
-<a href="{{ route('players.edit', ['team_id' => $team->id, 'player_id' => $player->id]) }}">編集</a>
+<a href="{{ route('players.edit', ['team_id' => $team->id, 'player_id' => $player->id]) }}">編集</a><br>
 <form action="{{ route('players.destroy', ['team_id' => $team->id, 'player_id' => $player->id]) }}" method="POST" style="display:inline">
     @csrf
     @method('DELETE')
     <button type="submit" onclick="return cinfirm('本当に削除しますか？')">削除</button>
-</form>
-
-<a href="{{ route('players.index', ['team_id' => $team->id]) }}">戻る</a>
+</form><br>
+<a href="{{ route('players.index', ['team_id' => $team->id]) }}">戻る</a><br>
+<a href="{{ route('top') }}">トップページ</a>
