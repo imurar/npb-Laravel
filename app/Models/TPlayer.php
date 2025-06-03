@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Models\MPosition;
 use App\Models\MTeam;
 use App\Models\MPrefecture;
@@ -46,4 +47,7 @@ class TPlayer extends Model
     protected $casts = [
         'is_favorite' => 'boolean',
     ];
+
+    use SoftDeletes;
+    protected $dates = ['deleted_at'];
 }
