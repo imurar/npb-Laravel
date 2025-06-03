@@ -1,6 +1,6 @@
 <script setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-import { Head } from '@inertiajs/vue3';
+import { Head, Link } from '@inertiajs/vue3';
 </script>
 
 <template>
@@ -22,9 +22,12 @@ import { Head } from '@inertiajs/vue3';
                 >
                     <div class="p-6 text-gray-900">
                         You're logged in!
+                        <h1>プロ野球選手名鑑</h1>
+                        <Link href="/teams">球団一覧</Link>
                     </div>
                 </div>
             </div>
+
         </div>
     </AuthenticatedLayout>
 </template>
