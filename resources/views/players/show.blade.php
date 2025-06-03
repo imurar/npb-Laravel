@@ -34,5 +34,6 @@
     @method('DELETE')
     <button type="submit" onclick="return cinfirm('本当に削除しますか？')">削除</button>
 </form><br>
+<a href="{{ route('players.index', ['team_id' => $team->id]) }}">戻る</a><br>
+<a href="{{ route('top') }}">トップページ</a>
 
-<a href="{{ route('players.index', ['team_id' => $team->id]) }}">戻る</a>
