@@ -36,3 +36,4 @@
 </form><br>
 <a href="{{ route('players.index', ['team_id' => $team->id]) }}">戻る</a><br>
 <a href="{{ route('top') }}">トップページ</a>
+
