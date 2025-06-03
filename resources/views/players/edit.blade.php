@@ -46,6 +46,6 @@
             @endforeach
         </select>
     </label><br>
-    <button type="submit">更新</button>
+    <button type="submit">更新</button><br>
     <a href="{{ route('players.show', ['team_id' => $team->id, 'player_id' => $player->id]) }}">戻る</a>
 </form>
