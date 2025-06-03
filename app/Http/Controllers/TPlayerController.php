@@ -102,9 +102,19 @@ class TPlayerController extends Controller
     }
 
     public function restore($team_id, $player_id){
-        $player = TPlayer::withTrashed()->where('team_id', $team_id)->findOrFail($player_id);
+        $player = TPlayer::onlyTrashed()
+            ->where('team_id', $team_id)
+            ->where('id', $player_id)
+            ->firstOrFail();
+            
         $player->restore();
 
-        return back()->with('success', '選手情報を復元しました。');
+        return redirect()->route('players.deleted', ['team_id' => $team_id])->with('success', '選手情報を復元しました。');
     }
+
+    public function deleted($team_id){
+        $players = TPlayer::onlyTrashed()->where('team_id', $team_id)->get();
+        return view('players.deleted', compact('players', 'team_id'));
+    }
+
 }

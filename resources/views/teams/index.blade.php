@@ -21,4 +21,4 @@
     </tbody>
 </table>
 
-    <a href="{{route('top')}}">戻る</a>
+<a href="{{route('top')}}">戻る</a>
