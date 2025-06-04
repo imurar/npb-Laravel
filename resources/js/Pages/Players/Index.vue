@@ -36,11 +36,12 @@ const props = defineProps({
                             </Link>
                         </td>
                         
-                        <td>{{ player.position?.name ?? '' }}</td>
+                        <td>{{ player.position?.name || '' }}</td>
                     </tr>
                 </tbody>
             </table>
             <Link :href="route('teams.show', { team_id: props.team.id})">戻る</Link><br /> 
+            <Link :href="route('dashboard')">トップページ</Link>
         </div>
     </AuthenticatedLayout>
 </template>
