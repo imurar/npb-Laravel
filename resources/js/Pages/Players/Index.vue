@@ -4,7 +4,7 @@ import { Head, Link } from '@inertiajs/vue3';
 
 const props = defineProps({
   players: Array,
-  team: Object
+  team: Object, 
 });
 </script>
 
@@ -25,8 +25,17 @@ const props = defineProps({
                 </thead>
                 <tbody>
                     <tr v-for="player in props.players" :key="player.id">
-                        <td>{{ player.uniform_no }}</td>
-                        <td>{{ player.name }}</td>
+                        <td>
+                            <Link :href="route('players.show', {team_id: props.team.id, player_id: player.id})">
+                                {{ player.uniform_no }}
+                            </Link>
+                        </td>
+                        <td>
+                            <Link :href="route('players.show', {team_id: props.team.id, player_id: player.id})">    
+                                {{ player.name }}
+                            </Link>
+                        </td>
+                        
                         <td>{{ player.position?.name ?? '' }}</td>
                     </tr>
                 </tbody>

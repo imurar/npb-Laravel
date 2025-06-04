@@ -14,7 +14,7 @@ class TPlayerController extends Controller
 {
     //
     public function index($team_id){
-        $players = TPlayer::where('team_id', $team_id)->get();
+        $players = TPlayer::with('position')->where('team_id', $team_id)->get();
         $team = MTeam::findOrFail($team_id);
         //return view('players.index', compact('players', 'team'));
         return Inertia::render('Players/Index', ['players' => $players, 'team' => $team]);
