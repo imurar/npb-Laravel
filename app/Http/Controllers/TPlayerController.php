@@ -58,7 +58,8 @@ class TPlayerController extends Controller
         
         $team = MTeam::findOrFail($team_id);
 
-        return view('players.show', compact('team', 'player'));
+        //return view('players.show', compact('team', 'player'));
+        return Inertia::render('Players/Show', ['team' => $team, 'player' => $player]);
     }   
 
     public function edit($team_id, $player_id){
