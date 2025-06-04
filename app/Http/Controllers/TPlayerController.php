@@ -33,17 +33,17 @@ class TPlayerController extends Controller
         //バリテーション
         $validated  = $request->validate([
             'name' => 'required|string|max:255',
-            'position_id' => 'required|string|max:255',
+            'position_id' => 'required|integer|max:9',
             'uniform_no' => 'required|string|max:10',
             'highschool' => 'nullable|string|max:255',
             'university' => 'nullable|string|max:255',
             'birthday' => 'nullable|string|max:255',
-            'prefecture_id' => 'nullable|string|max:255',
-            'city_id' => 'nullable|string|max:255',
+            'prefecture_id' => 'nullable|integer|max:47',
+            'city_id' => 'nullable|integer|max:1892',
         ]);
 
         //team_idは固定なので後から追加
-        $validated['team_id']=$team_id;
+        $validated['team_id'] = $team_id;
 
         TPlayer::create($validated);
 
