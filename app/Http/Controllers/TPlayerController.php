@@ -8,6 +8,7 @@ use App\Models\MTeam;
 use App\Models\MPosition;
 use App\Models\MPrefecture;
 use App\Models\MCity;
+use Inertia\Inertia;
 
 class TPlayerController extends Controller
 {
@@ -15,7 +16,8 @@ class TPlayerController extends Controller
     public function index($team_id){
         $players = TPlayer::where('team_id', $team_id)->get();
         $team = MTeam::findOrFail($team_id);
-        return view('players.index', compact('players', 'team'));
+        //return view('players.index', compact('players', 'team'));
+        return Inertia::render('Players/Index', ['players' => $players, 'team' => $team]);
     }
 
     public function create($team_id){
@@ -23,7 +25,8 @@ class TPlayerController extends Controller
         $positions = MPosition::all();
         $prefectures = MPrefecture::all();
         $citys = MCity::all();
-        return view('players.create', compact('team', 'positions', 'prefectures', 'citys'));
+        //return view('players.create', compact('team', 'positions', 'prefectures', 'citys'));
+        return Inertia::render('Players/Create', ['team' => $team, 'positions' => $positions, 'prefectures' => $prefectures, 'citys' => $citys]);
     }
 
     public function store(Request $request, $team_id){
@@ -45,7 +48,7 @@ class TPlayerController extends Controller
         TPlayer::create($validated);
 
         return redirect()->route('players.index', ['team_id' => $team_id])
-                        ->with('success', '選手が登録されました。');
+            ->with('success', '選手が登録されました。');
     }
 
     public function show($team_id, $player_id){
