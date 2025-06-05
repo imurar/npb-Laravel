@@ -1,37 +1,48 @@
 <script setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-import { Head, Link, useForm } from '@inertiajs/vue3';
+import { Link, useForm, router } from '@inertiajs/vue3';
 
-const props = defineProps ({ 
-    teams:Array,
-    team:Object,
+const props = defineProps({
+    player: Object,
+    team: Object,
     positions: Array,
     prefectures: Array,
     citys: Array,
+    errors: Object,
 });
 
+const player = props.player;
+
 const form = useForm({
-    uniform_no: '',
-    name: '',
-    position_id: '',
-    highschool: '',
-    university: '',
-    birthday: '',
-    prefecture_id: '',
-    city_id: '',
+    uniform_no: props.player.uniform_no || '',
+    name: props.player.name || '',
+    position_id: props.player.position_id || '',
+    highschool: props.player.highschool || '',
+    university: props.player.university || '',
+    birthday: props.player.birthday || '',
+    prefecture_id: props.player.prefecture_id || '',
+    city_id: props.player.city_id || '',
 });
 
 const { errors } = form;
+
+const submit = () => {
+    if(confirm('本当に更新しますか？')){
+        form.put(route('players.update', {
+            team_id: props.team.id,
+            player_id: props.player.id
+        }));
+    }
+};
 
 </script>
 
 <template>
     <AuthenticatedLayout>
         <template #header>
-            <h1>選手登録画面</h1>
+            <h1>選手情報編集画面</h1>
         </template>
-            
-        
+
         <div v-if="Object.keys(errors).length" style="color: red;">
             <ul>
                 <li v-for="(message, key) in errors" :key="key">{{ message }}</li>
@@ -39,7 +50,7 @@ const { errors } = form;
         </div>
         
         <label> 球団: {{ team.name }} </label>
-        <form @submit.prevent="form.post(route('players.store', { team_id: props.team.id }))">
+        <form @submit.prevent="submit">
             <label>
                 背番号:
                 <input type="text" v-model="form.uniform_no" />
@@ -69,12 +80,12 @@ const { errors } = form;
                 大学:
                 <input type="text" v-model="form.university" />
             </label><br />
-
+            
             <label>
                 誕生日:
                 <input type="text" v-model="form.birthday" />
             </label><br />
-
+            
             <label>
                 出身地(都道府県):
                 <select v-model="form.prefecture_id">
@@ -95,9 +106,9 @@ const { errors } = form;
                 </select>
             </label><br />
 
-            <button type="submit" :disabled="form.processing">登録</button>
+            <button type="submit" :disabled="form.processing">更新</button>
         </form>
         
-        <Link :href="route('teams.show', { team_id: team.id })">戻る</Link>
+        <Link :href="route('players.show', { team_id: props.team.id, player_id: player.id })">戻る</Link>
     </AuthenticatedLayout>
 </template>

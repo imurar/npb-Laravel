@@ -73,20 +73,21 @@ class TPlayerController extends Controller
         $prefectures =Mprefecture::all();
         $citys = MCity::all();
 
-        return view('players.edit', compact('player', 'team', 'positions', 'prefectures', 'citys'));
+        //return view('players.edit', compact('player', 'team', 'positions', 'prefectures', 'citys'));
+        return Inertia::render('Players/Edit', ['player' => $player, 'team' => $team, 'positions' => $positions, 'prefectures' => $prefectures, 'citys' => $citys]);
     }
 
     public function update(Request $request, $team_id, $player_id){
 
         $request->validate([
             'name' => 'required|string|max:255',
-            'position_id' => 'required|string|max:255',
+            'position_id' => 'required|integer|max:9',
             'uniform_no' => 'required|string|max:10',
             'highschool' => 'nullable|string|max:255',
             'university' => 'nullable|string|max:255',
             'birthday' => 'nullable|string|max:255',
-            'prefecture_id' => 'nullable|string|max:255',
-            'city_id' => 'nullable|string|max:255',
+            'prefecture_id' => 'nullable|integer|max:47',
+            'city_id' => 'nullable|integer|max:1892',
         ]);
 
         $player = TPlayer::where('team_id', $team_id)->findOrFail($player_id);
@@ -102,7 +103,7 @@ class TPlayerController extends Controller
         $player->delete();
 
         return redirect()->route('players.index', ['team_id' => $team_id])
-                        ->with('success', '選手情報が削除されました。');
+            ->with('success', '選手情報が削除されました。');
     }
 
     public function restore($team_id, $player_id){
@@ -113,8 +114,8 @@ class TPlayerController extends Controller
             
         $player->restore();
 
-        //return redirect()->route('players.deleted', ['team_id' => $team_id])->with('success', '選手情報を復元しました。');
-        return redirect()->route('players.deleted', ['team_id' => $team_id]);
+        return redirect()->route('players.deleted', ['team_id' => $team_id])
+            ->with('success', '選手情報を復元しました。');
     }
 
     public function deleted($team_id){
