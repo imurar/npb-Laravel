@@ -14,11 +14,7 @@ const restore = (player) => {
         form.post(route('players.restore', {
             team_id: props.team_id,
             player_id: player.id
-        }), {
-            onSuccess: () => {
-                router.visit(route('players.deleted', {team_id: props.team_id}));
-            }
-        });
+        }));
     }
 };
 </script>
