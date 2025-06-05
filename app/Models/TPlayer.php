@@ -15,19 +15,19 @@ class TPlayer extends Model
     protected $table = 't_players';
 
     public function position(){
-        return $this->belongsTo(MPosition::class);
+        return $this->belongsTo(MPosition::class, 'position_id');
     }
 
     public function team(){
-        return $this->belongsTo(MTeam::class);
+        return $this->belongsTo(MTeam::class, 'team_id');
     }
 
     public function prefecture(){
-        return $this->belongsTo(MPrefecture::class);
+        return $this->belongsTo(MPrefecture::class, 'prefecture_id');
     }
 
     public function city(){
-        return $this->belongsTo(MCity::class);
+        return $this->belongsTo(MCity::class, 'city_id');
     }
 
     protected $fillable = [
