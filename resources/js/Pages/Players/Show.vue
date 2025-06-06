@@ -17,6 +17,25 @@ const destroy = () => {
         }));
     }
 };
+
+const toggleFavorite = async () => {
+  try {
+    const response = await fetch(route('players.favorite', {team_id: props.team.id, player_id: props.player.id }), {
+      method: 'POST',
+      headers: {
+        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+        'Accept': 'application/json',
+      },
+    });
+
+    const data = await response.json();
+    props.player.is_favorite = data.is_favorite;
+
+  } catch (error) {
+    console.error(error);
+  }
+};
+
 </script>
 
 <template>
@@ -54,6 +73,9 @@ const destroy = () => {
                     </tr>
                 </tbody>
             </table>
+            <button @click="toggleFavorite" :disabled="form.processing">
+                {{ props.player.is_favorite ? '★ お気に入り' : '☆ お気に入りに追加' }}
+            </button><br />
             <Link :href="route('players.edit', {'team_id': props.team.id, 'player_id': props.player.id})">編集</Link><br />
             <button @click="destroy" :disabled="form.processing">削除</button><br />
             <Link :href="route('players.index', {'team_id': props.team.id})">戻る</Link><br />

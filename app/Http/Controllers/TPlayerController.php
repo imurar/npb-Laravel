@@ -9,6 +9,7 @@ use App\Models\MPosition;
 use App\Models\MPrefecture;
 use App\Models\MCity;
 use Inertia\Inertia;
+use Illuminate\Support\Facades\Auth;
 
 class TPlayerController extends Controller
 {
@@ -54,6 +55,9 @@ class TPlayerController extends Controller
     public function show($team_id, $player_id){
         $player = TPlayer::with(['position', 'team', 'prefecture', 'city'])
             ->where('team_id', $team_id)
+            ->withCount(['favoredByUsers as is_favorite' => function($query) {
+            $query->where('user_id', Auth::id());
+        }])
             ->findOrFail($player_id);
         
         $team = MTeam::findOrFail($team_id);
@@ -122,6 +126,25 @@ class TPlayerController extends Controller
         $players = TPlayer::onlyTrashed()->where('team_id', $team_id)->get();
         //return view('players.deleted', compact('players', 'team_id'));
         return Inertia::render('Players/Deleted', ['players' => $players, 'team_id' => $team_id]);
+    }
+
+    public function toggleFavorite($team_id, $player_id){
+        $user = Auth::user();
+
+        $player = TPlayer::where('team_id', $team_id)->findOrFail($player_id);
+
+        //すでにお気に入りに登録されているかチェック
+        $exists = $user->favoritePlayers()->where('player_id', $player_id)->exists();
+
+        if($exists){
+            $user->favoritePlayers()->detach($player_id);
+            $favorited = false;
+        } else {
+            $user->favoritePlayers()->attach($player_id);
+            $favorited = true;
+        }
+
+        return response()->json(['is_favorite' => $favorited]);
     }
 
 }

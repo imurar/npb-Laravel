@@ -45,4 +45,8 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    public function favoritePlayers(){
+        return $this->belongsToMany(TPlayer::class, 't_favorite_players', 'user_id', 'player_id')->withTimestamps();
+    }
 }
