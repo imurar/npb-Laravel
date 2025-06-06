@@ -50,4 +50,8 @@ class TPlayer extends Model
 
     use SoftDeletes;
     protected $dates = ['deleted_at'];
+
+    public function favoredByUsers (){
+        return $this->belongsToMany(User::class, 't_favorite_players', 'player_id', 'user_id')->withTimestamps();
+    }
 }

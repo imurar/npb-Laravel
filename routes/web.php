@@ -48,5 +48,6 @@ Route::put('/teams/{team_id}/players/{player_id}', [TPlayerController::class, 'u
 Route::delete('/teams/{team_id}/players/{player_id}', [TPlayerController::class, 'destroy'])->name('players.destroy');
 Route::post('/teams/{team_id}/players/{player_id}/restore', [TPlayerController::class, 'restore'])->name('players.restore');
 
+Route::post('/teams/{team_id}/players/{player_id}/favorite', [TPlayerController::class, 'toggleFavorite'])->middleware('auth')->name('players.favorite');
 
 require __DIR__.'/auth.php';
