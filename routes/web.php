@@ -3,6 +3,7 @@
 use App\Http\Controllers\MTeamController;
 use App\Http\Controllers\MPlayerController;
 use App\Http\Controllers\TPlayerController;
+use App\Http\Controllers\TFavoriteController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
@@ -49,5 +50,6 @@ Route::delete('/teams/{team_id}/players/{player_id}', [TPlayerController::class,
 Route::post('/teams/{team_id}/players/{player_id}/restore', [TPlayerController::class, 'restore'])->name('players.restore');
 
 Route::post('/teams/{team_id}/players/{player_id}/favorite', [TPlayerController::class, 'toggleFavorite'])->middleware('auth')->name('players.favorite');
+Route::get('/favorites', [TFavoriteController::class, 'index'])->middleware('auth')->name('favorites.index');
 
 require __DIR__.'/auth.php';

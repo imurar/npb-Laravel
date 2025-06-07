@@ -42,6 +42,7 @@ const props = defineProps({
             </table>
             <Link :href="route('players.deleted', { team_id: props.team.id})">削除選手ページ遷移</Link><br /> 
             <Link :href="route('teams.show', { team_id: props.team.id})">戻る</Link><br /> 
+            <Link :href="route('favorites.index')">お気に入り選手一覧</Link><br />
             <Link :href="route('dashboard')">トップページ</Link>
         </div>
     </AuthenticatedLayout>

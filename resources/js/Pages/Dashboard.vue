@@ -23,7 +23,8 @@ import { Head, Link } from '@inertiajs/vue3';
                     <div class="p-6 text-gray-900">
                         You're logged in!
                         <h1>プロ野球選手名鑑</h1>
-                        <Link :href="route('teams.index')">球団一覧</Link>
+                        <Link :href="route('teams.index')">球団一覧</Link><br />
+                        <Link :href="route('favorites.index')">お気に入り選手一覧</Link><br />
                     </div>
                 </div>
             </div>
