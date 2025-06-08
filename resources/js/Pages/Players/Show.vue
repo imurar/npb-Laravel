@@ -30,7 +30,6 @@ const toggleFavorite = async () => {
 
     const data = await response.json();
     props.player.is_favorite = data.is_favorite;
-
   } catch (error) {
     console.error(error);
   }
@@ -39,47 +38,54 @@ const toggleFavorite = async () => {
 </script>
 
 <template>
+    <Head title="選手詳細" />
+    
     <AuthenticatedLayout>
         <template #header>
-            <h1>選手詳細</h1>
+            <h1 class="text-2xl font-bold text-center mb-6">選手詳細</h1>
         </template>
 
-        <div>
-            <table border="1" cellpadding="5">
-                <thead>
-                    <tr>
-                        <th>背番号</th>
-                        <th>名前</th>
-                        <th>ポジション</th>
-                        <th>球団</th>
-                        <th>高校</th>
-                        <th>大学</th>
-                        <th>誕生日</th>
-                        <th>出身地(都道府県)</th>
-                        <th>出身地(市区町村)</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>{{ props.player.uniform_no }}</td>
-                        <td>{{ props.player.name }}</td>
-                        <td>{{ props.player.position?.name || '' }}</td>
-                        <td>{{ props.player.team?.name || '' }}</td>
-                        <td>{{ props.player.highschool }}</td>
-                        <td>{{ props.player.university }}</td>
-                        <td>{{ props.player.birthday }}</td>
-                        <td>{{ props.player.prefecture?.name || '' }}</td>
-                        <td>{{ props.player.city?.name || '' }}</td>
-                    </tr>
-                </tbody>
-            </table>
-            <button @click="toggleFavorite" :disabled="form.processing">
-                {{ props.player.is_favorite ? '★ お気に入り' : '☆ お気に入りに追加' }}
-            </button><br />
-            <Link :href="route('players.edit', {'team_id': props.team.id, 'player_id': props.player.id})">編集</Link><br />
-            <button @click="destroy" :disabled="form.processing">削除</button><br />
-            <Link :href="route('players.index', {'team_id': props.team.id})">戻る</Link><br />
-            <Link :href="route('dashboard')">トップページ</Link>
+        <div class="max-w-md mx-auto bg-white p-6 rounded shadow space-y-4">
+            <div class="text-center">
+                <button @click="toggleFavorite" :disabled="form.processing"
+                    class="text-2xl focus:outline-none hover:scale-110 transition-transform">
+                        {{ props.player.is_favorite ? '★お気に入り': '☆お気に入り追加' }}
+                </button>
+            </div>    
+            
+            <div class="space-y-2">
+                <p><span class="font-semibold">背番号:</span> {{ props.player.uniform_no }} </p>
+                <p><span class="font-semibold">名前:</span> {{ props.player.name }} </p>
+                <p><span class="font-semibold">ポジション:</span> {{ props.player.position.name }} </p>
+                <p><span class="font-semibold">球団:</span> {{ props.player.team.name }} </p>
+                <p><span class="font-semibold">高校:</span> {{ props.player.highschool || '-' }} </p>
+                <p><span class="font-semibold">大学:</span> {{ props.player.university  || '-' }} </p>
+                <p><span class="font-semibold">誕生日:</span> {{ props.player.birthday   || '-' }} </p>
+                <p><span class="font-semibold">出身地(都道府県):</span> {{ props.player.prefecture?.name || '-' }} </p>
+                <p><span class="font-semibold">出身地(市区町村):</span> {{ props.player.city?.name || '-' }} </p>
+            </div>
+            
+            <div class="mt-6 space-y-3">
+                <Link :href="route('players.edit', {'team_id': props.team.id, 'player_id': props.player.id})"
+                    class="block w-full text-center bg-yellow-500 hover:bg-yellow-600 text-white py-2 rounded transition">
+                    編集
+                </Link>
+
+                <button @click="destroy" :disabled="form.processing"
+                    class="w-full bg-red-600 hover:bg-red-700 text-white py-2 rounded transition disabbled:opacity-50">
+                    削除
+                </button>
+
+                <Link :href="route('players.index', {'team_id': props.team.id})"
+                    class="block w-full text-center text-blue-600 hover:underline">
+                    戻る
+                </Link>
+
+                <Link :href="route('dashboard')"
+                    class="block w-full text-center text-blue-600 hover:underline">
+                    トップページ
+                </Link>
+            </div>
         </div>
     </AuthenticatedLayout>
 </template>

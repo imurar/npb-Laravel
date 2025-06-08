@@ -14,22 +14,29 @@ const props = defineProps({
         <template #header>
             <h1 class="text-xl font-bold">お気に入り選手一覧</h1>
         </template>
-        <div>
-            <table border="1" cellpadding="5">
+        <div class="max-w-3xl mx-auto px-4">
+            <table v-if="players.length" class="table-auto border-collapse border border-gray-300 w-full">
                 <thead>
                     <tr>
-                        <th>名前</th>
-                        <th>チーム</th>
+                        <th class="border border-gray-300 px-4 py-2 text-center">名前</th>
+                        <th class="border border-gray-300 px-4 py-2 text-center">チーム</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="player in props.players" :key="player.id">
-                        <td>{{ player.name}}</td>
-                        <td>{{ player.team.name }}</td>
+                    <tr v-for="player in players" :key="player.id" class="hover:bg-gray-100">
+                        <td class="border border-gray-300 px-4 py-2 text-center">{{ player.name}}</td>
+                        <td class="border border-gray-300 px-4 py-2 text-center">{{ player.team.name }}</td>
                     </tr>
                 </tbody>
             </table>
-            <Link :href="route('dashboard')">トップページへ戻る</Link><br />
+
+            <p v-else class="text-center text-gray-500 mt-6">お気に入り選手が登録されていません。</p>
+            
+            <div class="text-center mt-6">
+                <Link :href="route('dashboard')" class="text-blue-600 hover:underline">
+                    トップページへ戻る
+                </Link>
+            </div>
         </div>
     </AuthenticatedLayout>
 </template>
