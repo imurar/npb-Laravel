@@ -30,7 +30,7 @@ class TPlayerController extends Controller
         return Inertia::render('Players/Create', ['team' => $team, 'positions' => $positions, 'prefectures' => $prefectures, 'citys' => $citys]);
     }
 
-    public function store(Request $request, $team_id){
+    public function store(Request $request, $team_id){      
         //バリテーション
         $validated  = $request->validate([
             'name' => 'required|string|max:255',
@@ -38,13 +38,14 @@ class TPlayerController extends Controller
             'uniform_no' => 'required|string|max:10',
             'highschool' => 'nullable|string|max:255',
             'university' => 'nullable|string|max:255',
-            'birthday' => 'nullable|string|max:255',
+            'birthday' => 'required|date',
             'prefecture_id' => 'nullable|integer|max:47',
             'city_id' => 'nullable|integer|max:1892',
         ]);
 
         //team_idは固定なので後から追加
         $validated['team_id'] = $team_id;
+        $validated['birthday'] = \Carbon\Carbon::parse($validated['birthday'])->format('Y年m月d日');
 
         TPlayer::create($validated);
 
@@ -70,7 +71,7 @@ class TPlayerController extends Controller
         $player = TPlayer::with(['position', 'team', 'prefecture', 'city'])
             ->where('team_id', $team_id)
             ->findOrFail($player_id);
-        
+            
         $team = MTeam::findOrFail($team_id);
 
         $positions = MPosition::all();
@@ -89,10 +90,12 @@ class TPlayerController extends Controller
             'uniform_no' => 'required|string|max:10',
             'highschool' => 'nullable|string|max:255',
             'university' => 'nullable|string|max:255',
-            'birthday' => 'nullable|string|max:255',
+            'birthday' => 'nullable|date',
             'prefecture_id' => 'nullable|integer|max:47',
             'city_id' => 'nullable|integer|max:1892',
         ]);
+
+        $request['birthday'] = \Carbon\Carbon::paerse($request['birthday'])->format('Y年m月d日');
 
         $player = TPlayer::where('team_id', $team_id)->findOrFail($player_id);
 
