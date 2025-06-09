@@ -1,6 +1,8 @@
 <script setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { Head, Link, useForm } from '@inertiajs/vue3';
+import { ref, watch } from 'vue';
+import axios from 'axios';
 
 const props = defineProps ({ 
     teams:Array,
@@ -19,6 +21,24 @@ const form = useForm({
     birthday: '2000-01-01',
     prefecture_id: '',
     city_id: '',
+});
+
+const citys = ref(props.citys);
+
+watch(() => form.prefecture_id, async (newPrefId) => {
+    if(newPrefId) {
+        try{
+            const response = await axios.get(`/api/prefectures/${newPrefId}/citys`);
+            console.log('API response:', response.data); 
+            citys.value = response.data;
+            form.city_id = '';
+        } catch (error) {
+            console.log('市区町村の取得に失敗しました。', error);
+        }
+    } else {
+        citys.value = [];
+        form.city_id = ''
+    }
 });
 
 const { errors } = form;
@@ -56,7 +76,7 @@ const { errors } = form;
             <div class="flex flex-col">
                 <label for="position_id" class="mb-1 font-medium">ポジション:</label>
                 <select id="position_id" v-model="form.position_id" class="border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400">
-                    <option value="" disabled selected>選択してください</option>
+                    <option value="" disabled>選択してください</option>
                     <option v-for="position in props.positions" :key="position.id" :value="position.id">
                         {{ position.name }}
                     </option>
@@ -82,7 +102,7 @@ const { errors } = form;
             <div class="flex flex-col">
                 <label for="prefecture_id" class="mb-1 font-medium">出身地(都道府県):</label>
                 <select id="prefecture_id" v-model="form.prefecture_id" class="border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400">
-                    <option value="" disabled selected>選択してください</option>
+                    <option value="" disabled>選択してください</option>
                     <option v-for="prefecture in props.prefectures" :key="prefecture.id" :value="prefecture.id">
                         {{ prefecture.name }}
                     </option>
@@ -92,8 +112,8 @@ const { errors } = form;
             <div class="flex flex-col">
                 <label for="city_id" class="mb-1 font-medium">出身地(市区町村):</label>
                 <select id="city_id" v-model="form.city_id" class="border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400">
-                    <option value="" disabled selected>選択してください</option>
-                    <option v-for="city in props.citys" :key="city.id" :value="city.id">
+                    <option value="" disabled>選択してください</option>
+                    <option v-for="city in citys" :key="city.id" :value="city.id">
                         {{ city.name }}
                     </option>
                 </select>
