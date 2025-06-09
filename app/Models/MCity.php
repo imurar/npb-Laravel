@@ -11,7 +11,7 @@ class MCity extends Model
 
     public $timestamps = false;
 
-    protected $fillable = ['name'];
+    protected $fillable = ['name', 'prefectures_id'];
 
     public function players(){
         return $this->hasMany(TPlayer::class, 'city_id');

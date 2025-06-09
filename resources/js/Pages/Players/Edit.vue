@@ -1,6 +1,8 @@
 <script setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { Head, Link, useForm } from '@inertiajs/vue3';
+import { ref, watch } from 'vue';
+import axios from 'axios';
 
 const props = defineProps({
     player: Object,
@@ -21,6 +23,24 @@ const form = useForm({
     birthday: props.player.birthday || '',
     prefecture_id: props.player.prefecture_id || '',
     city_id: props.player.city_id || '',
+});
+
+const citys = ref(props.citys);
+
+watch(() => form.prefecture_id, async (newPrefId) => {
+    if(newPrefId) {
+        try{
+            const response = await axios.get(`/api/prefectures/${newPrefId}/citys`);
+            console.log('API response:', response.data); 
+            citys.value = response.data;
+            form.city_id = '';
+        } catch (error) {
+            console.log('市区町村の取得に失敗しました。', error);
+        }
+    } else {
+        citys.value = [];
+        form.city_id = '';
+    }
 });
 
 const { errors } = form;
@@ -72,7 +92,7 @@ const submit = () => {
                     <select v-model="form.position_id"
                         class="border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
                     >
-                        <option value="" disabled selected>選択してください</option>
+                        <option value="" disabled>選択してください</option>
                         <option v-for="position in props.positions" :key="position.id" :value="position.id">
                             {{ position.name }}
                         </option>
@@ -105,7 +125,7 @@ const submit = () => {
                     <select v-model="form.prefecture_id"
                         class="border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
                     >
-                        <option value="" disabled selected>選択してください</option>
+                        <option value="" disabled>選択してください</option>
                         <option v-for="prefecture in props.prefectures" :key="prefecture.id" :value="prefecture.id">
                             {{ prefecture.name }}
                         </option>
@@ -117,8 +137,8 @@ const submit = () => {
                     <select v-model="form.city_id"
                         class="border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
                     >
-                        <option value="" disabled selected>選択してください</option>
-                        <option v-for="city in props.citys" :key="city.id" :value="city.id">
+                        <option value="" disabled>選択してください</option>
+                        <option v-for="city in citys" :key="city.id" :value="city.id">
                             {{ city.name }}
                         </option>
                     </select>
