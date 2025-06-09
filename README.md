@@ -60,7 +60,7 @@ watch(() => form.prefecture_id, async (newPrefId) => {
         form.city_id = '';
     }
 });
----
+```
 
 ---
 ## 📁 ディレクトリ構成
@@ -130,7 +130,7 @@ php artisan serve
 ---
 
 
-📝 その他
+### 📝 その他
 Inertia により Vue コンポーネントに props を渡し、サーバーサイドとフロントエンドをシームレスに連携。
 
 <Link> コンポーネントを使用してページ遷移。<a> タグは通常のリンクに利用。
