@@ -60,12 +60,12 @@ watch(() => form.prefecture_id, async (newPrefId) => {
         form.city_id = '';
     }
 });
-
 ---
+
 ---
 ## 📁 ディレクトリ構成
 
-<pre>
+```plaintext
 resources/
 └── js/
     ├── Layouts/
@@ -80,8 +80,7 @@ resources/
         └── Teams/
             ├── Index.vue
             └── Show.vue
-</pre>
-
+```
 
 ---
 
@@ -128,7 +127,7 @@ php artisan serve
 - `teams` と `players` はネストしたリソースルーティングの形をとっています。
 - そのほか認証やパスワード関連のルートも多く定義されていますが、割愛しています。
 
-
+---
 
 
 📝 その他
