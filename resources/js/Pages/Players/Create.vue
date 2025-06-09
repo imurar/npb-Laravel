@@ -16,7 +16,7 @@ const form = useForm({
     position_id: '',
     highschool: '',
     university: '',
-    birthday: '',
+    birthday: '2000-01-01',
     prefecture_id: '',
     city_id: '',
 });

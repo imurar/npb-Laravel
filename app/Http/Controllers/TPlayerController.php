@@ -45,7 +45,7 @@ class TPlayerController extends Controller
 
         //team_idは固定なので後から追加
         $validated['team_id'] = $team_id;
-        $validated['birthday'] = \Carbon\Carbon::parse($validated['birthday'])->format('Y年m月d日');
+        $validated['birthday'] = \Carbon\Carbon::parse($validated['birthday'])->format('Y-m-d');
 
         TPlayer::create($validated);
 
@@ -95,7 +95,7 @@ class TPlayerController extends Controller
             'city_id' => 'nullable|integer|max:1892',
         ]);
 
-        $request['birthday'] = \Carbon\Carbon::paerse($request['birthday'])->format('Y年m月d日');
+        $request['birthday'] = \Carbon\Carbon::parse($request['birthday'])->format('Y-m-d');
 
         $player = TPlayer::where('team_id', $team_id)->findOrFail($player_id);
 
