@@ -78,7 +78,7 @@ const toggleFavorite = async () => {
 
                 <Link :href="route('players.index', {'team_id': props.team.id})"
                     class="block w-full text-center text-blue-600 hover:underline">
-                    戻る
+                    選手一覧に戻る
                 </Link>
 
                 <Link :href="route('dashboard')"

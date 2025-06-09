@@ -132,7 +132,7 @@ const submit = () => {
 
                     <Link :href="route('players.show', { team_id: props.team.id, player_id: props.player.id })"
                         class="text-blue-600 hover:underline text-blue-800">
-                        戻る
+                        選手詳細に戻る
                     </Link>
                 </div>    
             </form>
