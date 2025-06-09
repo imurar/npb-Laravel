@@ -12,7 +12,7 @@ const props = defineProps({
     <Head title="お気に入り選手一覧" />
     <AuthenticatedLayout>
         <template #header>
-            <h1 class="text-xl font-bold">お気に入り選手一覧</h1>
+            <h1 class="text-xl font-bold text-center">お気に入り選手一覧</h1>
         </template>
         <div class="max-w-3xl mx-auto px-4">
             <table v-if="players.length" class="table-auto border-collapse border border-gray-300 w-full">
@@ -24,7 +24,12 @@ const props = defineProps({
                 </thead>
                 <tbody>
                     <tr v-for="player in players" :key="player.id" class="hover:bg-gray-100">
-                        <td class="border border-gray-300 px-4 py-2 text-center">{{ player.name}}</td>
+                        <td class="border border-gray-300 px-4 py-2 text-center">
+                                <Link :href="route('players.show', {team_id: player.team.id, player_id: player.id})"
+                                    class="block text-lg font-semibold text-blue-700 hover:underline"> 
+                                    {{ player.name }}
+                                </Link>
+                        </td>
                         <td class="border border-gray-300 px-4 py-2 text-center">{{ player.team.name }}</td>
                     </tr>
                 </tbody>

@@ -54,7 +54,7 @@ const restore = (player) => {
             <div class="flex justify-center mt-4">
                 <Link :href="route('players.index', { team_id: props.team_id })"
                     class="text-blue-600 underline hover:text-blue-800">
-                    戻る
+                    選手一覧に戻る
                 </Link>
             </div>
         </div>
