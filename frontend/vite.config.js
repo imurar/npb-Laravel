@@ -5,7 +5,7 @@ const repoName = 'npb-directory-Laravel'
 
 // https://vite.dev/config/
 export default defineConfig({
-  base: `/${repoName}`,
+  base: `/${repoName}/`,
   build: {
     outDir: 'dist',
   },

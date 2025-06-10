@@ -3,6 +3,8 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
+  
+"homepage": "https://imurar.github.io/npb-directory-Laravel",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
