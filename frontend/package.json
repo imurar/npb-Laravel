@@ -3,8 +3,7 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
-  
-"homepage": "https://imurar.github.io/npb-directory-Laravel",
+  "homepage": "https://imurar.github.io/npb-directory-Laravel",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
@@ -12,8 +11,10 @@
     "deploy": "gh-pages -d dist"
   },
   "dependencies": {
+    "@inertiajs/vue3": "^2.0.11",
     "tailwindcss": "^4.1.8",
-    "vue": "^3.5.13"
+    "vue": "^3.5.13",
+    "vue-router": "^4.5.1"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4.1.8",
