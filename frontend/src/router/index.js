@@ -18,12 +18,12 @@ const routes = [
   { path: '/favorites', component: PlayersFavorites },
   { path: '/teams/:team_id/players', component: PlayersIndex },
   { path: '/teams/:team_id/players/:player_id', component: PlayersShow },
-  { path: '/teams/', component: TeamsIndex },
+  { path: '/teams', component: TeamsIndex },
   { path: '/teams/:team_id', component: TeamsShow },
 ]
 
 const router = createRouter({
-    history: createWebHistory('/'),
+    history: createWebHistory('/npb-directory-Laravel/'),
     routes,
 })
 
