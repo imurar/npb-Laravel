@@ -8,7 +8,7 @@ const repoName = 'npb-directory-Laravel'
 export default defineConfig({
   base: `/${repoName}/`,
   build: {
-    outDir: '../frontend/dist',
+    outDir: 'dist',
   },
   plugins: [vue()],
   resolve: {
