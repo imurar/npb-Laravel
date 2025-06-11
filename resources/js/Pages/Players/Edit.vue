@@ -20,6 +20,7 @@ const form = useForm({
     position_id: props.player.position_id || '',
     highschool: props.player.highschool || '',
     university: props.player.university || '',
+    company: props.player.company || '',
     birthday: props.player.birthday || '',
     prefecture_id: props.player.prefecture_id || '',
     city_id: props.player.city_id || '',
@@ -109,6 +110,13 @@ const submit = () => {
                 <div class="flex flex-col">
                     <label class="mb-1 font-medium">大学:</label>
                     <input type="text" v-model="form.university"
+                        class="border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
+                    />
+                </div>
+
+                <div class="flex flex-col">
+                    <label class="mb-1 font-medium">会社:</label>
+                    <input type="text" v-model="form.company"
                         class="border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
                     />
                 </div>

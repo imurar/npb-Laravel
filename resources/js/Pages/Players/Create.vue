@@ -18,6 +18,7 @@ const form = useForm({
     position_id: '',
     highschool: '',
     university: '',
+    company: '',
     birthday: '2000-01-01',
     prefecture_id: '',
     city_id: '',
@@ -92,6 +93,11 @@ const { errors } = form;
             <div class="flex flex-col">
                 <label for="university" class="mb-1 font-medium">大学:</label>
                 <input id="university" type="text" v-model="form.university" class="border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400" />
+            </div>
+
+            <div class="flex flex-col">
+                <label for="company" class="mb-1 font-medium">会社:</label>
+                <input id="company" type="text" v-model="form.company" class="border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400" />
             </div>
 
             <div class="flex flex-col">

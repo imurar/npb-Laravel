@@ -60,6 +60,7 @@ const toggleFavorite = async () => {
                 <p><span class="font-semibold">球団:</span> {{ props.player.team.name }} </p>
                 <p><span class="font-semibold">高校:</span> {{ props.player.highschool || '-' }} </p>
                 <p><span class="font-semibold">大学:</span> {{ props.player.university  || '-' }} </p>
+                <p><span class="font-semibold">会社:</span> {{ props.player.company  || '-' }} </p>
                 <p><span class="font-semibold">誕生日:</span> {{ props.player.birthday   || '-' }} </p>
                 <p><span class="font-semibold">出身地(都道府県):</span> {{ props.player.prefecture?.name || '-' }} </p>
                 <p><span class="font-semibold">出身地(市区町村):</span> {{ props.player.city?.name || '-' }} </p>
