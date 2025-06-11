@@ -23,9 +23,14 @@ WORKDIR /var/www/html
 
 # Laravel依存関係インストール（本番用）
 RUN composer install --no-dev --optimize-autoloader
+    && php artisan config:clear \
+    && php artisan cache:clear \
+    && php artisan route:clear \
+    && php artisan view:clear
 
 # パーミッション設定
-RUN chown -R www-data:www-data storage bootstrap/cache
+RUN chown -R www-data:www-data storage bootstrap/cache \
+    && chmod -R 775 storage bootstrap/cache
 
 # ポート開放
 EXPOSE 80
