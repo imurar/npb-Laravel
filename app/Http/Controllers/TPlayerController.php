@@ -38,6 +38,7 @@ class TPlayerController extends Controller
             'uniform_no' => 'required|string|max:10',
             'highschool' => 'nullable|string|max:255',
             'university' => 'nullable|string|max:255',
+            'company' => 'nullable|string|max:255',
             'birthday' => 'required|date',
             'prefecture_id' => 'nullable|integer|max:47',
             'city_id' => 'nullable|integer|max:1892',
