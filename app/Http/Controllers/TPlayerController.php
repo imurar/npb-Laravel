@@ -10,6 +10,7 @@ use App\Models\MPrefecture;
 use App\Models\MCity;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\Rule;
 
 class TPlayerController extends Controller
 {
@@ -35,13 +36,22 @@ class TPlayerController extends Controller
         $validated  = $request->validate([
             'name' => 'required|string|max:255',
             'position_id' => 'required|integer|max:9',
-            'uniform_no' => 'required|string|max:10',
+            'uniform_no' => [
+                'required',
+                'max:10',
+                Rule::unique('t_players')->where(function($query) use($request, $team_id) {
+                    return $query->where('name', $request->name)
+                                ->where('team_id', $team_id);
+                }),
+            ],
             'highschool' => 'nullable|string|max:255',
             'university' => 'nullable|string|max:255',
             'company' => 'nullable|string|max:255',
             'birthday' => 'required|date',
             'prefecture_id' => 'nullable|integer|max:47',
             'city_id' => 'nullable|integer|max:1892',
+        ], [
+        'uniform_no.unique' => 'この選手名と背番号の組み合わせはすでに登録されています。',
         ]);
 
         //team_idは固定なので後から追加
