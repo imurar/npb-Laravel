@@ -5,12 +5,14 @@ import { ref, watch } from 'vue';
 import axios from 'axios';
 
 const props = defineProps ({ 
-    teams:Array,
-    team:Object,
+    teams: Array,
+    team: Object,
     positions: Array,
     prefectures: Array,
     citys: Array,
 });
+
+const citys = ref([...props.citys]);
 
 const form = useForm({
     uniform_no: '',
@@ -24,11 +26,9 @@ const form = useForm({
     city_id: '',
 });
 
-const citys = ref(props.citys);
-
 watch(() => form.prefecture_id, async (newPrefId) => {
-    if(newPrefId) {
-        try{
+    if (newPrefId) {
+        try {
             const response = await axios.get(`/api/prefectures/${newPrefId}/citys`);
             console.log('API response:', response.data); 
             citys.value = response.data;
@@ -38,12 +38,17 @@ watch(() => form.prefecture_id, async (newPrefId) => {
         }
     } else {
         citys.value = [];
-        form.city_id = ''
+        form.city_id = '';
     }
 });
 
-const { errors } = form;
-
+const submit = () => {
+    form.post(route('players.store', { team_id: props.team.id }), {
+        onError: () => {
+            console.log(form.errors); // エラー内容を確認できる
+        }
+    });
+};
 </script>
 
 <template>
@@ -54,16 +59,22 @@ const { errors } = form;
             <h1 class="text-2xl font-bold text-center mb-6">選手登録画面</h1>
         </template>
             
-        
-        <div v-if="Object.keys(errors).length" class="mb-4 text-red-600">
+        <div v-if="Object.keys(form.errors).length" class="mb-4 text-red-600">
             <ul>
-                <li v-for="(message, key) in errors" :key="key">{{ message }}</li>
+                <li v-for="(messages, key) in form.errors" :key="key">
+                    <template v-if="Array.isArray(messages)">
+                        <div v-for="msg in messages" :key="msg">{{ msg }}</div>
+                    </template>
+                    <template v-else>
+                        {{ messages }}
+                    </template>
+                </li>
             </ul>
         </div>
         
         <h2 class="mb-6 text-lg font-semibold text-center py-8\">球団: {{ team.name }}</h2>
 
-        <form @submit.prevent="form.post(route('players.store', { team_id: props.team.id }))" class="max-w-md mx-auto space-y-6 bg-white p-6 rounded shadow">
+        <form @submit.prevent="submit" class="max-w-md mx-auto space-y-6 bg-white p-6 rounded shadow">
             <div class="flex flex-col">
                 <label for="uniform_no" class="mb-1 font-medium">背番号:</label>
                 <input id="uniform_no" type="text" v-model="form.uniform_no" class="border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400" />
