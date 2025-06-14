@@ -98,13 +98,22 @@ class TPlayerController extends Controller
         $request->validate([
             'name' => 'required|string|max:255',
             'position_id' => 'required|integer|max:9',
-            'uniform_no' => 'required|string|max:10',
+            'uniform_no' => [
+                'required',
+                'max:10',
+                Rule::unique('t_players')->where(function ($query) use($request, $team_id) {
+                    return $query->where('name', $request->name)
+                                ->where('team_id', $team_id);
+                })->ignore($player_id),
+            ],
             'highschool' => 'nullable|string|max:255',
             'university' => 'nullable|string|max:255',
             'birthday' => 'nullable|date',
             'prefecture_id' => 'nullable|integer|max:47',
             'city_id' => 'nullable|integer|max:1892',
-        ]);
+        ], [
+                'uniform_no.unique' => 'この選手名と背番号の組み合わせはすでに登録されています。',
+            ]);
 
         $request['birthday'] = \Carbon\Carbon::parse($request['birthday'])->format('Y-m-d');
 
