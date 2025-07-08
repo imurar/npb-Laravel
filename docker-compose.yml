@@ -11,11 +11,13 @@ services:
     depends_on:
       - db
     environment:
-      DB_HOST: ${LARAVEL_DB_HOST}
-      DB_PORT: ${LARAVEL_DB_PORT}
-      DB_DATABASE: ${LARAVEL_DB_DATABASE}
-      DB_USERNAME: ${LARAVEL_DB_USERNAME}
-      DB_PASSWORD: ${LARAVEL_DB_PASSWORD}
+      DB_HOST: ${DB_HOST}
+      DB_PORT: ${DB_PORT}
+      DB_DATABASE: ${DB_DATABASE}
+      DB_USERNAME: ${DB_USERNAME}
+      DB_PASSWORD: ${DB_PASSWORD}
+
+    command: php artisan serve --host=0.0.0.0 --port=8000
 
   frontend:
     image: node:18
