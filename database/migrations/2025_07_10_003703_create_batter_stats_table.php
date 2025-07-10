@@ -13,7 +13,16 @@ return new class extends Migration
     {
         Schema::create('batter_stats', function (Blueprint $table) {
             $table->id();
-            $table->timestamps();
+                $table->foreignId('player_id')->constrained()->onDelete('cascade');
+                $table->date('match_date');
+                $table->string('opponent_team');
+                $table->integer('at_bats');
+                $table->integer('hits');
+                $table->integer('home_runs');
+                $table->integer('rbi');
+                $table->integer('strikeouts');
+                $table->integer('walks');
+                $table->timestamp('created_at')->useCurrent();
         });
     }
 
