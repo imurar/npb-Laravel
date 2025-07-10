@@ -13,7 +13,10 @@ return new class extends Migration
     {
         Schema::create('external_api_sources', function (Blueprint $table) {
             $table->id();
-            $table->timestamps();
+            $table->foreignId('player_id')->constrained()->onDelete('cascade');
+            $table->string('source_name');
+            $table->string('source_url');
+            $table->timestamp('last_synced_at')->nullable();
         });
     }
 
