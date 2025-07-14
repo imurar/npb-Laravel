@@ -1,61 +1,177 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# ⚾ プロ野球選手名鑑アプリ
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Blade テンプレート + Vue コンポーネントを使った、プロ野球選手名鑑管理アプリです。  
+Laravel Sail を用いて Docker 上で開発を行います。
 
-## About Laravel
+---
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## 🛠 使用技術
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+-   **Laravel 10**
+-   **Blade + Vue 3**（SPA ではなく Blade 内でのコンポーネント利用）
+-   **PostgreSQL**
+-   **Laravel Sail (Docker 開発環境)**
+-   **認証機能（Laravel Breeze）**
+-   **外部 API からの成績取得**
+-   **お気に入り機能**
+-   **認可（管理者のみ CRUD 可能）**
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+---
 
-## Learning Laravel
+## 🚀 セットアップ手順
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+```bash
+git clone https://github.com/imurar/npb-Laravel
+cd npb-Laravel
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+# Sail 起動（初回のみ）
+./vendor/bin/sail up -d
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+# 依存関係インストール
+./vendor/bin/sail composer install
+./vendor/bin/sail npm install && ./vendor/bin/sail npm run dev
 
-## Laravel Sponsors
+# .env 作成
+cp .env.example .env
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+# アプリキー生成
+./vendor/bin/sail artisan key:generate
 
-### Premium Partners
+# DBマイグレーション
+./vendor/bin/sail artisan migrate
+```
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+---
 
-## Contributing
+## 🧱 DB 構成
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+### users
 
-## Code of Conduct
+| カラム名   | 型        | 説明                 |
+| ---------- | --------- | -------------------- |
+| id         | bigint    | PK                   |
+| name       | string    | ユーザー名           |
+| email      | string    | ログイン用メール     |
+| password   | string    | ハッシュ済パスワード |
+| role       | enum      | `user` or `admin`    |
+| created_at | timestamp |                      |
+| updated_at | timestamp |                      |
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+### teams
 
-## Security Vulnerabilities
+| カラム名     | 型     | 説明             |
+| ------------ | ------ | ---------------- |
+| id           | bigint | PK               |
+| name         | string | チーム名         |
+| abbreviation | string | 略称 (例: HAWKS) |
+| logo_url     | string | ロゴ URL         |
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+### players
 
-## License
+| カラム名  | 型     | 説明       |
+| --------- | ------ | ---------- |
+| id        | bigint | PK         |
+| name      | string | 選手名     |
+| team_id   | FK     | 所属チーム |
+| number    | int    | 背番号     |
+| photo_url | string | 顔写真 URL |
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+### positions
+
+| カラム名     | 型     | 説明     |
+| ------------ | ------ | -------- |
+| id           | bigint | PK       |
+| name         | string | 例: 捕手 |
+| abbreviation | string | 例: C    |
+
+### player_position（多対多）
+
+| player_id   | FK  | players.id   |
+| ----------- | --- | ------------ |
+| position_id | FK  | positions.id |
+
+### batter_stats
+
+| カラム名      | 型     | 説明 |
+| ------------- | ------ | ---- |
+| match_date    | 日付   |      |
+| opponent_team | string |      |
+| at_bats       | int    |      |
+| hits          | int    |      |
+| home_runs     | int    |      |
+| rbi           | int    |      |
+| strikeouts    | int    |      |
+| walks         | int    |      |
+
+### pitcher_stats
+
+| カラム名        | 型      | 説明 |
+| --------------- | ------- | ---- |
+| match_date      | 日付    |      |
+| opponent_team   | string  |      |
+| innings_pitched | float   |      |
+| hits_allowed    | int     |      |
+| strikeouts      | int     |      |
+| walks           | int     |      |
+| earned_runs     | int     |      |
+| win             | boolean |      |
+| save            | boolean |      |
+
+### favorites
+
+ユーザーのお気に入り選手登録テーブル。
+
+| user_id   | FK  | users.id   |
+| --------- | --- | ---------- |
+| player_id | FK  | players.id |
+
+### external_api_sources
+
+選手成績の外部データ取得元の記録用。
+
+| player_id   | FK     | players.id |
+| ----------- | ------ | ---------- |
+| source_name | string |            |
+
+---
+
+## 🔐 認証 / 認可
+
+-   Laravel Breeze を利用（`sail artisan breeze:install` 済）
+-   `role` カラムで `admin` のみ選手・成績の編集可能
+-   Laravel Policy / Gate により制御
+
+---
+
+## 💡 機能概要
+
+-   ✅ ログイン / 登録
+-   ✅ 選手一覧 / 詳細ページ
+-   ✅ お気に入り追加 / 削除
+-   ✅ 直近 3 試合の成績表示（打者・投手）
+-   ✅ 管理者による CRUD 機能
+-   ✅ 外部 API との定期同期（予定：Artisan Command + スケジューラ）
+
+---
+
+## 📚 今後の実装予定
+
+-   成績同期用バッチ（外部 API 連携）
+-   Vue での「お気に入り選手」表示コンポーネント
+-   成績グラフ化（Chart.js など）
+-   チーム別選手一覧
+
+---
+
+## 🧪 テスト
+
+```bash
+./vendor/bin/sail artisan test
+```
+
+---
+
+## 🧑‍💻 開発者
+
+-   開発者: R.Imura
+-   GitHub: [@imurar](https://github.com/imurar)
