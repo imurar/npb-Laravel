@@ -173,5 +173,5 @@ cp .env.example .env
 
 ## 🧑‍💻 開発者
 
--   開発者: imura
+-   開発者: R.Imura
 -   GitHub: [@imurar](https://github.com/imurar)
