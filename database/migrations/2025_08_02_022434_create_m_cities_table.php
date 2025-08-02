@@ -13,7 +13,8 @@ return new class extends Migration
     {
         Schema::create('m_cities', function (Blueprint $table) {
             $table->id();
-            $table->timestamps();
+            $table->foreignId('prefecture_id')->constrained('m_prefectures')->onDelete('cascade');
+            $table->string('name');
         });
     }
 
