@@ -28,6 +28,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
+    Route::get('/favorites', [TFavoriteController::class, 'index'])->name('favorites.index');
+    Route::post('/teams/{team_id}/players/{player_id}/favorite', [TPlayerController::class, 'toggleFavorite'])->name('players.favorite');
 });
 
 Route::get('/top', function () {
