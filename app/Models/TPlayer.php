@@ -7,6 +7,9 @@ use SoftDeletes;
 
 class TPlayer extends Model
 {
+
+    public $timestamps = false;
+    
     public function position(){
         return $this->belongsTo(MPosition::class, 'position_id');
     }
