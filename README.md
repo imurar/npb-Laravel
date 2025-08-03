@@ -110,20 +110,16 @@ php artisan serve
 
 ## 📚 ルーティング一覧
 
-| メソッド | URI                                          | 名前                                      | コントローラー・アクション      | 用途                             |
-| -------- | -------------------------------------------- | ----------------------------------------- | ------------------------------- | -------------------------------- | ---------------- |
-| GET      | HEAD                                         | /teams                                    | teams.index                     | MTeamController@index            | チーム一覧表示   |
-| GET      | HEAD                                         | /teams/{team_id}                          | teams.show                      | MTeamController@show             | チーム詳細表示   |
-| GET      | HEAD                                         | /teams/{team_id}/players                  | players.index                   | TPlayerController@index          | 選手一覧表示     |
-| POST     | /teams/{team_id}/players                     | players.store                             | TPlayerController@store         | 選手登録                         |
-| GET      | HEAD                                         | /teams/{team_id}/players/create           | players.create                  | TPlayerController@create         | 選手作成画面     |
-| GET      | HEAD                                         | /teams/{team_id}/players/deleted          | players.deleted                 | TPlayerController@deleted        | 削除済み選手一覧 |
-| GET      | HEAD                                         | /teams/{team_id}/players/{player_id}      | players.show                    | TPlayerController@show           | 選手詳細表示     |
-| PUT      | /teams/{team_id}/players/{player_id}         | players.update                            | TPlayerController@update        | 選手情報更新                     |
-| DELETE   | /teams/{team_id}/players/{player_id}         | players.destroy                           | TPlayerController@destroy       | 選手削除                         |
-| GET      | HEAD                                         | /teams/{team_id}/players/{player_id}/edit | players.edit                    | TPlayerController@edit           | 選手編集画面     |
-| POST     | /teams/{team_id}/players/{player_id}/restore | players.restore                           | TPlayerController@restore       | 削除済み選手の復元               |
-| GET      | /api/prefectures/{prefecture}/citys          |                                           | MCityController@getByPrefecture | 指定都道府県の市区町村一覧を取得 |
+| メソッド | URI                                  | 名前            | コントローラー・アクション | 用途             |
+| -------- | ------------------------------------ | --------------- | -------------------------- | ---------------- |
+| GET      | /teams                               | teams.index     | MTeamController@index      | チーム一覧表示   |
+| GET      | /teams/{team_id}                     | teams.show      | MTeamController@show       | チーム詳細表示   |
+| GET      | /teams/{team_id}/players             | players.index   | TPlayerController@index    | 選手一覧表示     |
+| POST     | /teams/{team_id}/players             | players.store   | TPlayerController@store    | 選手登録         |
+| GET      | /teams/{team_id}/players/create      | players.create  | TPlayerController@create   | 選手作成画面     |
+| GET      | /teams/{team_id}/players/deleted     | players.deleted | TPlayerController@deleted  | 削除済み選手一覧 |
+| GET      | /teams/{team_id}/players/{player_id} | players.show    | TPlayerController@show     | 選手詳細表示     |
+| PUT      | /teams/{team_id}/players/{player_id} | players.update  | TPlayerController@update   |
 
 ---
 
