@@ -1,61 +1,144 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# 📘 NPB Directory アプリケーション
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+プロ野球の球団・選手情報を管理・表示するシステムです。  
+Laravel (Breeze + Inertia.js + Vue 3) をベースに、SPA として構築しています。
 
-## About Laravel
+---
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## 🏗️ 使用技術
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+-   **PHP 8.4.7**
+-   **Laravel 12**
+-   **Vue 3** (Composition API)
+-   **Inertia.js**
+-   **Laravel Breeze (Vue)** - 認証スキャフォールド
+-   **Tailwind CSS**
+-   **Eloquent ORM**
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+---
 
-## Learning Laravel
+## 📚 機能一覧
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+### ✅ 基本機能
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+| 機能                     | 説明                                                                                                                                                                                     |
+| ------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| ユーザー認証             | Breeze で構築（ログイン / 登録 / ログアウト）                                                                                                                                            |
+| 球団一覧                 | `/teams` にて球団一覧を表示（Inertia + Vue）                                                                                                                                             |
+| 球団詳細                 | `/teams/{id}` で詳細表示                                                                                                                                                                 |
+| 選手一覧                 | 球団ごとの選手一覧表示                                                                                                                                                                   |
+| 削除選手表示             | 論理削除された選手の一覧表示                                                                                                                                                             |
+| 復元機能                 | 論理削除からの復元処理                                                                                                                                                                   |
+| お気に入り機能           | ユーザーが選手をお気に入りとしてマークできる機能を追加                                                                                                                                   |
+| 都道府県連動市区町村選択 | 選手編集フォームにて、都道府県選択に応じて市区町村のプルダウンが動的に切り替わる機能を実装。Vue の `watch` で選択状態を監視し、選択変更時に該当データを API から取得して表示内容を更新。 |
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+---
 
-## Laravel Sponsors
+## 🔄 都道府県・市区町村の動的連携機能
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+選手情報の作成・編集画面にて、出身地（都道府県）を選択すると、該当する市区町村の一覧がプルダウンに自動で表示される動的連携機能を実装しています。
 
-### Premium Partners
+### 🧩 フロントエンドの処理
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+-   Vue 3 の `ref` と `watch` を使用。
+-   `form.prefecture_id` の変更を監視して、動的に市区町村を取得。
+-   `axios` により Laravel 側 API `/api/prefectures/{id}/citys` に GET リクエスト。
+-   応答として返ってきた市区町村一覧を `citys` に格納し、セレクトボックスを更新。
+-   都道府県が変更された際は、`form.city_id` を初期化。
 
-## Contributing
+```js
+watch(
+    () => form.prefecture_id,
+    async (newPrefId) => {
+        if (newPrefId) {
+            try {
+                const response = await axios.get(
+                    `/api/prefectures/${newPrefId}/citys`
+                );
+                citys.value = response.data;
+                form.city_id = "";
+            } catch (error) {
+                console.log("市区町村の取得に失敗しました。", error);
+            }
+        } else {
+            citys.value = [];
+            form.city_id = "";
+        }
+    }
+);
+```
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+---
 
-## Code of Conduct
+## 📁 ディレクトリ構成
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+```plaintext
+resources/
+└── js/
+    ├── Layouts/
+    │   └── AuthenticatedLayout.vue
+    └── Pages/
+        ├── Players/
+        │   ├── Create.vue
+        │   ├── Deleted.vue
+        │   ├── Edit.vue
+        │   ├── Index.vue
+        │   └── Show.vue
+        └── Teams/
+            ├── Index.vue
+            └── Show.vue
+```
 
-## Security Vulnerabilities
+---
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+## 🚀 開発環境構築手順
 
-## License
+1. Breeze + Vue インストール
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+```bash
+composer require laravel/breeze --dev
+php artisan breeze:install vue
+npm install && npm run dev
+php artisan migrate
+```
+
+2. 開発サーバー起動
+
+```bash
+php artisan serve
+```
+
+## 📚 ルーティング一覧
+
+| メソッド | URI                                          | 名前                                      | コントローラー・アクション      | 用途                             |
+| -------- | -------------------------------------------- | ----------------------------------------- | ------------------------------- | -------------------------------- | ---------------- |
+| GET      | HEAD                                         | /teams                                    | teams.index                     | MTeamController@index            | チーム一覧表示   |
+| GET      | HEAD                                         | /teams/{team_id}                          | teams.show                      | MTeamController@show             | チーム詳細表示   |
+| GET      | HEAD                                         | /teams/{team_id}/players                  | players.index                   | TPlayerController@index          | 選手一覧表示     |
+| POST     | /teams/{team_id}/players                     | players.store                             | TPlayerController@store         | 選手登録                         |
+| GET      | HEAD                                         | /teams/{team_id}/players/create           | players.create                  | TPlayerController@create         | 選手作成画面     |
+| GET      | HEAD                                         | /teams/{team_id}/players/deleted          | players.deleted                 | TPlayerController@deleted        | 削除済み選手一覧 |
+| GET      | HEAD                                         | /teams/{team_id}/players/{player_id}      | players.show                    | TPlayerController@show           | 選手詳細表示     |
+| PUT      | /teams/{team_id}/players/{player_id}         | players.update                            | TPlayerController@update        | 選手情報更新                     |
+| DELETE   | /teams/{team_id}/players/{player_id}         | players.destroy                           | TPlayerController@destroy       | 選手削除                         |
+| GET      | HEAD                                         | /teams/{team_id}/players/{player_id}/edit | players.edit                    | TPlayerController@edit           | 選手編集画面     |
+| POST     | /teams/{team_id}/players/{player_id}/restore | players.restore                           | TPlayerController@restore       | 削除済み選手の復元               |
+| GET      | /api/prefectures/{prefecture}/citys          |                                           | MCityController@getByPrefecture | 指定都道府県の市区町村一覧を取得 |
+
+---
+
+### 補足
+
+-   `GET|HEAD` は GET メソッドに HEAD メソッドも含むことを意味します。
+-   `teams` と `players` はネストしたリソースルーティングの形をとっています。
+-   そのほか認証やパスワード関連のルートも多く定義されていますが、割愛しています。
+
+---
+
+### 📝 その他
+
+Inertia により Vue コンポーネントに props を渡し、サーバーサイドとフロントエンドをシームレスに連携。
+
+<Link> コンポーネントを使用してページ遷移。<a> タグは通常のリンクに利用。
+
+Ziggy を導入して route('route.name') を JavaScript 側で使用。
