@@ -3,62 +3,187 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\TPlayer;
+use App\Models\MTeam;
+use App\Models\MPosition;
+use App\Models\MPrefecture;
+use App\Models\MCity;
+use Inertia\Inertia;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\Rule;
 
 class TPlayerController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index($team_id)
     {
-        //
+        $players = TPlayer::with('position')->where('team_id', $team_id)->get();
+        $team = MTeam::findOrFail($team_id);
+        return Inertia::render('Players/Index', ['players' => $players, 'team' => $team]);
     }
 
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create($team_id)
     {
-        //
+        $team = MTeam::findOrFail($team_id);
+        $positions = MPosition::all();
+        $prefectures = MPrefecture::all();
+        $cities = MCity::all();
+        return Inertia::render('Players/Create', ['team' => $team, 'positions' => $positions, 'prefectures' => $prefectures, 'cities' => $cities]);
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(Request $request, $team_id)
     {
-        //
+        //バリテーション
+        $validated  = $request->validate([
+            'name' => 'required|string|max:255',
+            'position_id' => 'required|integer|max:9',
+            'uniform_no' => [
+                'required',
+                'max:10',
+                Rule::unique('t_players', 'uniform_no')->where(function($query) use($team_id) {
+                    return $query->where('team_id', $team_id);
+                }),
+            ],
+            'highschool' => 'nullable|string|max:255',
+            'university' => 'nullable|string|max:255',
+            'company' => 'nullable|string|max:255',
+            'birthday' => 'required|date',
+            'prefecture_id' => 'nullable|integer|max:47',
+            'city_id' => 'nullable|integer|max:1892',
+        ],[
+            'uniform_no.unique' => 'この背番号の選手はすでに登録されています。'
+        ]);
+
+        // team_idは固のため、後から追加
+        $validated['team_id'] = $team_id;
+        $validated['birthday'] = \Carbon\Carbon::parse($validated['birthday'])->format('Y-m-d');
+        
+        TPlayer::create($validated);
+
+        return redirect()->route('players.index', ['team_id' => $team_id])
+            ->with('success', '選手が登録されました。');
     }
+
 
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
-    {
-        //
-    }
+    public function show($team_id, $player_id){
+        $player = TPlayer::with(['position', 'team', 'prefecture', 'cities'])
+            ->where('team_id', $team_id)
+            ->withCount(['favoredByUsers as is_favorite' => function($query) {
+            $query->where('user_id', Auth::id());
+        }])
+            ->findOrFail($player_id);
+        
+        $team = MTeam::findOrFail($team_id);
+
+        return Inertia::render('Players/Show', ['team' => $team, 'player' => $player]);
+    }   
+
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
-    {
-        //
+    public function edit($team_id, $player_id){
+        $player = TPlayer::with(['position', 'team', 'prefecture', 'city'])
+            ->where('team_id', $team_id)
+            ->findOrFail($player_id);
+            
+        $team = MTeam::findOrFail($team_id);
+        $positions = MPosition::all();
+        $prefectures =Mprefecture::all();
+        $cities = MCity::all();
+
+        return Inertia::render('Players/Edit', ['player' => $player, 'team' => $team, 'positions' => $positions, 'prefectures' => $prefectures, 'cities' => $cities]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
-    {
-        //
+    public function update(Request $request, $team_id, $player_id){
+
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'position_id' => 'required|integer|max:9',
+            'uniform_no' => [
+                'required',
+                'max:10',
+                Rule::unique('t_players')->where(function ($query) use($request, $team_id) {
+                    return $query->where('name', $request->name)
+                                ->where('team_id', $team_id);
+                })->ignore($player_id),
+            ],
+            'highschool' => 'nullable|string|max:255',
+            'university' => 'nullable|string|max:255',
+            'birthday' => 'nullable|date',
+            'prefecture_id' => 'nullable|integer|max:47',
+            'city_id' => 'nullable|integer|max:1892',
+        ], [
+                'uniform_no.unique' => 'この選手名と背番号の組み合わせはすでに登録されています。',
+            ]);
+
+        $request['birthday'] = \Carbon\Carbon::parse($request['birthday'])->format('Y-m-d');
+
+        $player = TPlayer::where('team_id', $team_id)->findOrFail($player_id);
+
+        $player->update($request->all());
+
+        return redirect()->route('players.show', ['team_id' => $team_id, 'player_id' => $player_id])
+            ->with('success', '選手情報を更新しました。');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
-    {
-        //
+    public function destroy($team_id, $player_id){
+        $player = TPlayer::where('team_id', $team_id)->findOrFail($player_id);
+        $player->delete();
+
+        return redirect()->route('players.index', ['team_id' => $team_id])
+            ->with('success', '選手情報が削除されました。');
+    }
+
+     public function restore($team_id, $player_id){
+        $player = TPlayer::onlyTrashed()
+            ->where('team_id', $team_id)
+            ->where('id', $player_id)
+            ->firstOrFail();
+            
+        $player->restore();
+
+        return redirect()->route('players.deleted', ['team_id' => $team_id])
+            ->with('success', '選手情報を復元しました。');
+    }
+
+    public function deleted($team_id){
+        $players = TPlayer::onlyTrashed()->where('team_id', $team_id)->get();
+        return Inertia::render('Players/Deleted', ['players' => $players, 'team_id' => $team_id]);
+    }
+
+    public function toggleFavorite($team_id, $player_id){
+        $user = Auth::user();
+        $player = TPlayer::where('team_id', $team_id)->findOrFail($player_id);
+
+        //すでにお気に入りに登録されているかチェック
+        $exists = $user->favoritePlayers()->where('player_id', $player_id)->exists();
+
+        if($exists){
+            $user->favoritePlayers()->detach($player_id);
+            $favorited = false;
+        } else {
+            $user->favoritePlayers()->attach($player_id);
+            $favorited = true;
+        }
+
+        return response()->json(['is_favorite' => $favorited]);
     }
 }
