@@ -42,8 +42,8 @@ Laravel (Breeze + Inertia.js + Vue 3) をベースに、SPA として構築し�
 
 -   Vue 3 の `ref` と `watch` を使用。
 -   `form.prefecture_id` の変更を監視して、動的に市区町村を取得。
--   `axios` により Laravel 側 API `/api/prefectures/{id}/citys` に GET リクエスト。
--   応答として返ってきた市区町村一覧を `citys` に格納し、セレクトボックスを更新。
+-   `axios` により Laravel 側 API `/api/prefectures/{id}/cities` に GET リクエスト。
+-   応答として返ってきた市区町村一覧を `cities` に格納し、セレクトボックスを更新。
 -   都道府県が変更された際は、`form.city_id` を初期化。
 
 ```js
@@ -53,15 +53,15 @@ watch(
         if (newPrefId) {
             try {
                 const response = await axios.get(
-                    `/api/prefectures/${newPrefId}/citys`
+                    `/api/prefectures/${newPrefId}/cities`
                 );
-                citys.value = response.data;
+                cities.value = response.data;
                 form.city_id = "";
             } catch (error) {
                 console.log("市区町村の取得に失敗しました。", error);
             }
         } else {
-            citys.value = [];
+            cities.value = [];
             form.city_id = "";
         }
     }
